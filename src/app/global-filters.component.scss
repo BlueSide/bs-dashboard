@@ -1,0 +1,36 @@
+@import "../styles.scss";
+
+$label-side-padding: 14px;
+$glyphicon-size: 14px;
+
+label {
+    padding: 3px;
+    padding-left: $label-side-padding;
+    padding-right: $label-side-padding;
+    width: 100%;
+    font-weight: 400;
+    user-select: none;
+
+    .selected {
+        background-color: aqua;
+    }
+}
+
+label:hover {
+    background-color: $hover-color;
+}
+
+input[type=checkbox] {
+    display:none;
+}
+
+.noglyphicon {
+    display: inline-block;
+    width: $glyphicon-size;
+    height: $glyphicon-size;
+}
+
+.spacer {
+    display: inline-block;
+    width: 6px;
+}
