@@ -10,5 +10,4 @@ export class AppComponent
 {
     public appTitle: string = 'Blue Side Dashboard';
     public liveUpdate: boolean = true;
-
 }

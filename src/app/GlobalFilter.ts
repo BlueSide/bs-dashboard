@@ -12,6 +12,5 @@ export class GlobalFilter
         this.name = name;
         this.filter = filter;
         this.operator = operator;
-        console.log(this.name);
     }
 }
