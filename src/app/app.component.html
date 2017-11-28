@@ -22,7 +22,7 @@
                     <ul class="dropdown-menu">
                         <li class="dropdown-header">Global Filters</li>
                         <li><a href="#">Action</a></li>
-                        <li><a href="#">Another action</a></li>
+                        <li class="menuitem2"><a href="#">Another action</a></li>
                         <li><a href="#">Something else here</a></li>
                         <li role="separator" class="divider"></li>
                         <li><a href="#">Separated link</a></li>
@@ -47,12 +47,8 @@
 </nav>
 
 <div class="container">
-    <div class="alert alert-info fade in" *ngIf="liveUpdate">
-        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-        Live Update is <strong>on</strong>
-    </div>
-    
     <h1>
         Welcome to {{appTitle}}!
     </h1>
+    <chart></chart>
 </div>
