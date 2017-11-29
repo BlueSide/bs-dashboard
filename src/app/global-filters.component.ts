@@ -14,11 +14,10 @@ export class GlobalFiltersComponent
 
     constructor()
     {
-        this.filters.push(new GlobalFilter("First filter", "", Operator.AND));
-        this.filters.push(new GlobalFilter("Second filter", "", Operator.AND));
-        this.filters.push(new GlobalFilter("Third filter", "", Operator.AND));
-        this.filters.push(new GlobalFilter("Fourth filter", "", Operator.AND));
-        
+        this.filters.push(new GlobalFilter("First filter"));
+        this.filters.push(new GlobalFilter("Second filter"));
+        this.filters.push(new GlobalFilter("Third filter"));
+        this.filters.push(new GlobalFilter("Fourth filter"));
     }
 
     toggle(index)

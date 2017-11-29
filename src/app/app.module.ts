@@ -1,20 +1,23 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-
+import { HttpClientModule } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 
 import { GlobalFiltersComponent } from './global-filters.component';
+import { ChartComponent } from './chart.component';
 
 @NgModule({
   declarations: [
       AppComponent,
-      GlobalFiltersComponent
+      GlobalFiltersComponent,
+      ChartComponent
   ],
   imports: [
       FormsModule,
-      BrowserModule
+      BrowserModule,
+      HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]
