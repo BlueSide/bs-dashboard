@@ -1,6 +1,8 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Chart } from 'chart.js';
+
+import { ChartType } from './ChartType';
+import { BSChart } from './BSChart';
 
 @Component({ 
     selector: 'chart',
@@ -11,16 +13,28 @@ import { Chart } from 'chart.js';
 export class ChartComponent implements OnInit
 {
     private ctx: any;
-    private chart: Chart;
+    private chart: BSChart;
     private server: any;
     
     @ViewChild('canvas') canvas: ElementRef;
 
-    constructor(private http: HttpClient) {
-    }
+    constructor(private http: HttpClient) { }
 
     ngOnInit()
     {
+        let options = {
+            responsive: false,
+            display:true
+        };
+
+        let data = [1,2,3];
+
+        let labels = ['New', 'In Progress', 'On Hold'];
+        let label = '# of Votes';
+        let ctx = this.canvas.nativeElement.getContext('2d');
+        this.chart = new BSChart(ChartType.PIE, data, options, labels, label, ctx);
+
+        /*
         var socket = new WebSocket("ws://localhost:8080/d/asdf");
         console.log(socket);
         // Connection opened
@@ -33,30 +47,12 @@ export class ChartComponent implements OnInit
         socket.addEventListener('message', function (event) {
             console.log('Message from server ', event.data);
         });
+*/
+        
     }
 
     render(data: any)
     {
-        this.ctx = this.canvas.nativeElement.getContext('2d');
-        this.chart = new Chart(this.ctx, {
-            type: 'pie',
-            data: {
-                labels: ["New", "In Progress", "On Hold"],
-                datasets: [{
-                    label: '# of Votes',
-                    data: null,
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)'
-                    ],
-                    borderWidth: 5
-                }]
-            },
-            options: {
-                responsive: false,
-                display:true
-            }
-        });
+        
     }
 }

@@ -7,6 +7,7 @@ import { AppComponent } from './app.component';
 import { GlobalFiltersComponent } from './global-filters.component';
 import { ChartComponent } from './chart.component';
 import { NavComponent } from './nav.component';
+import { LiveUpdateComponent } from './live-update.component';
 
 @NgModule({
   declarations: [
@@ -14,6 +15,7 @@ import { NavComponent } from './nav.component';
       NavComponent,
       GlobalFiltersComponent,
       ChartComponent
+      LiveUpdateComponent,
   ],
   imports: [
       FormsModule,
