@@ -11,7 +11,6 @@ import { BSChart } from './BSChart';
 
 export class ChartComponent extends DashboardComponent implements OnInit
 {
-    //TODO: Can we make this a constant or final somehow?
     //TODO: How do we expose this to the designer?
     readonly query = "https://bluesidenl.sharepoint.com/sites/dev/dashboard/_api/web/lists('3f891819-5635-47ff-81c1-992754c7859d')/items?$select=Title,Integer";
 
@@ -46,13 +45,13 @@ export class ChartComponent extends DashboardComponent implements OnInit
                 datasets: [{
                     label: 'CRL',
                     data: [],
-                    backgroundColor: [crl_color, crl_color, crl_color, crl_color],
+                    backgroundColor: crl_color,
                     borderWidth: 5
                 },
                            {
                     label: 'TRL',
                     data: [],
-                    backgroundColor: [trl_color, trl_color, trl_color, trl_color],
+                    backgroundColor: trl_color,
                 }]
             },
             options: {
