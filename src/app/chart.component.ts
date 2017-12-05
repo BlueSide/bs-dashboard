@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-
-import { ChartType } from './ChartType';
+import { DashboardComponent } from './DashboardComponent';
+import { Chart } from 'chart.js';
 import { BSChart } from './BSChart';
 
 @Component({ 
@@ -10,49 +9,88 @@ import { BSChart } from './BSChart';
     styleUrls: ['chart.component.scss']
 })
 
-export class ChartComponent implements OnInit
+export class ChartComponent extends DashboardComponent implements OnInit
 {
+    //TODO: Can we make this a constant or final somehow?
+    //TODO: How do we expose this to the designer?
+    readonly query = "https://bluesidenl.sharepoint.com/sites/dev/dashboard/_api/web/lists('3f891819-5635-47ff-81c1-992754c7859d')/items?$select=Title,Integer";
+
+    public chartLoaded: boolean;
+
+    protected chartObject: BSChart;
+
+    private chart: any;
     private ctx: any;
-    private chart: BSChart;
-    private server: any;
+
     
     @ViewChild('canvas') canvas: ElementRef;
 
-    constructor(private http: HttpClient) { }
+    constructor()
+    {
+        super();
+        this.chartLoaded = false;
+        this.dataQuery = this.query;
+    }
 
     ngOnInit()
     {
-        let options = {
-            responsive: false,
-            display:true
-        };
+        this.ctx = this.canvas.nativeElement.getContext('2d');
 
-        let data = [1,2,3];
-
-        let labels = ['New', 'In Progress', 'On Hold'];
-        let label = '# of Votes';
-        let ctx = this.canvas.nativeElement.getContext('2d');
-        this.chart = new BSChart(ChartType.PIE, data, options, labels, label, ctx);
-
-        /*
-        var socket = new WebSocket("ws://localhost:8080/d/asdf");
-        console.log(socket);
-        // Connection opened
-        socket.addEventListener('open', function (event) {
-            console.log(event);
-            socket.send('Hello from Dashboard!');
-        });
-
-        // Listen for messages
-        socket.addEventListener('message', function (event) {
-            console.log('Message from server ', event.data);
-        });
-*/
+        let crl_color = 'rgba(255,99,132, 1)';
+        let trl_color = 'rgba(54, 162, 235, 1)';
         
+        this.chartObject = {
+            type: 'bar',
+            data: {
+                labels: [],
+                datasets: [{
+                    label: 'CRL',
+                    data: [],
+                    backgroundColor: [crl_color, crl_color, crl_color, crl_color],
+                    borderWidth: 5
+                },
+                           {
+                    label: 'TRL',
+                    data: [],
+                    backgroundColor: [trl_color, trl_color, trl_color, trl_color],
+                }]
+            },
+            options: {
+                responsive: true,
+                display:true,
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero:true
+                        }
+                    }]
+                }
+            }
+        }
+        
+        this.chart = new Chart(this.ctx, this.chartObject);
     }
 
-    render(data: any)
+    protected onUpdate(data: any)
     {
+        this.chartLoaded = true;
         
+        let integers: number[] = [];
+        let labels: string[] = [];
+
+        console.log("New data!", data);
+        
+        for(var  i = 0; i < data.results.length; ++i)
+        {
+            integers.push(data.results[i].Integer);
+            labels.push(data.results[i].Title);
+        }
+
+        
+        
+        this.chart.data.labels = labels;
+        this.chart.data.datasets[0].data = integers;
+        this.chart.data.datasets[1].data = [].concat(integers).reverse();
+        this.chart.update();
     }
 }

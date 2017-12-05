@@ -32,27 +32,6 @@ $nav-width: 240px;
     overflow: auto;
 }
 
-@media (min-width: 1400px) {
-    .sidebar-left {
-        width: $nav-width + 10;
-        padding: 25px 35px 40px 35px;
-
-    }
-}
-
-@media (min-width: 1400px) {
-    .sidebar-left {
-        padding-left: $nav-width + 20;
-    }
-}
-
-@media (min-width: 1400px) {
-    .dashboard-title {
-        width: $nav-width + 10;
-        padding: 20px 35px 40px 35px;
-    }
-}
-
 .uk-nav-default h6 {
     text-transform: uppercase;
     color: #adb5bd;

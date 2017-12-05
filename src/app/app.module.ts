@@ -14,8 +14,8 @@ import { LiveUpdateComponent } from './live-update.component';
       AppComponent,
       NavComponent,
       GlobalFiltersComponent,
-      ChartComponent
-      LiveUpdateComponent,
+      ChartComponent,
+      LiveUpdateComponent
   ],
   imports: [
       FormsModule,

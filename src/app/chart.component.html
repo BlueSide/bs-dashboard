@@ -1,1 +1,4 @@
-<canvas #canvas></canvas>
+<div id="chart-container">
+    <div class="spinner" [hidden]="chartLoaded" uk-spinner="ratio: 2"></div>
+    <canvas #canvas [hidden]="!chartLoaded"></canvas>
+</div>
