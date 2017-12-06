@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { DashboardComponent } from './DashboardComponent';
+import { DataComponent } from './DataComponent';
 import { Chart } from 'chart.js';
 import { BSChart } from './BSChart';
 
@@ -9,34 +9,23 @@ import { BSChart } from './BSChart';
     styleUrls: ['chart.component.scss']
 })
 
-export class ChartComponent extends DashboardComponent implements OnInit
+export class ChartComponent extends DataComponent implements OnInit
 {
-    //TODO: How do we expose this to the designer?
-    readonly query = "https://bluesidenl.sharepoint.com/sites/dev/dashboard/_api/web/lists('3f891819-5635-47ff-81c1-992754c7859d')/items?$select=Title,Integer";
-
-    public chartLoaded: boolean;
 
     protected chartObject: BSChart;
-
-    private chart: any;
-    private ctx: any;
-
+    private chart: Chart;
+    private context : any;
     
     @ViewChild('canvas') canvas: ElementRef;
 
     constructor()
     {
         super();
-        this.chartLoaded = false;
-        this.dataQuery = this.query;
     }
 
-    ngOnInit()
+    ngOnInit(): void
     {
-        this.ctx = this.canvas.nativeElement.getContext('2d');
-
-        let crl_color = 'rgba(255,99,132, 1)';
-        let trl_color = 'rgba(54, 162, 235, 1)';
+        this.context = this.canvas.nativeElement.getContext('2d');
         
         this.chartObject = {
             type: 'bar',
@@ -45,13 +34,12 @@ export class ChartComponent extends DashboardComponent implements OnInit
                 datasets: [{
                     label: 'CRL',
                     data: [],
-                    backgroundColor: crl_color,
-                    borderWidth: 5
+                    backgroundColor: 'rgba(255,99,132, 1)',
                 },
                            {
                     label: 'TRL',
                     data: [],
-                    backgroundColor: trl_color,
+                    backgroundColor: 'rgba(54, 162, 235, 1)',
                 }]
             },
             options: {
@@ -67,25 +55,19 @@ export class ChartComponent extends DashboardComponent implements OnInit
             }
         }
         
-        this.chart = new Chart(this.ctx, this.chartObject);
+        this.chart = new Chart(this.context, this.chartObject);
     }
 
-    protected onUpdate(data: any)
+    protected onUpdate(data: any): void
     {
-        this.chartLoaded = true;
-        
         let integers: number[] = [];
         let labels: string[] = [];
-
-        console.log("New data!", data);
         
         for(var  i = 0; i < data.results.length; ++i)
         {
             integers.push(data.results[i].Integer);
             labels.push(data.results[i].Title);
-        }
-
-        
+        }     
         
         this.chart.data.labels = labels;
         this.chart.data.datasets[0].data = integers;
