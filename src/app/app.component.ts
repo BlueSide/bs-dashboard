@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { WebSocketService } from './WebSocketService';
 
 declare var UIkit: any;
 
@@ -13,8 +14,10 @@ export class AppComponent
     public appTitle: string = 'Blue Side Dashboard';
     public liveUpdate: boolean = true;
 
+    private webSocketService: WebSocketService;
+    
     constructor()
     {
-        // components can be called from the imported UIkit reference
+        this.webSocketService = new WebSocketService();
     }
 }

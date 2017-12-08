@@ -12,21 +12,12 @@ import { BSChart } from './BSChart';
 export class ChartComponent extends DataComponent implements OnInit
 {
 
-    protected chartObject: BSChart;
-    private chart: Chart;
-    private context : any;
+    protected chart: Chart;
     
-    @ViewChild('canvas') canvas: ElementRef;
-
-    constructor()
-    {
-        super();
-    }
+    constructor() { super(); }
 
     ngOnInit(): void
     {
-        this.context = this.canvas.nativeElement.getContext('2d');
-        
         this.chartObject = {
             type: 'bar',
             data: {
@@ -54,7 +45,7 @@ export class ChartComponent extends DataComponent implements OnInit
                 }
             }
         }
-        
+        console.log(this.context);
         this.chart = new Chart(this.context, this.chartObject);
     }
 
