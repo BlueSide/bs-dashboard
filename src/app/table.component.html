@@ -6,9 +6,13 @@
         </tr>
     </thead>
     <tbody>
-        <tr *ngFor="let value of values">
-            <td>{{value.Title}}</td>
-            <td>{{value.Integer}}</td>
+        <tr *ngFor="let data of dataSet1.data">
+            <td>{{data.Title}}</td>
+            <td>{{data.Integer}}</td>
+        </tr>
+        <tr *ngFor="let data of dataSet2.data">
+            <td>{{data.Title}}</td>
+            <td>{{data.Site_x0020_URL}}</td>
         </tr>
     </tbody>
 </table>

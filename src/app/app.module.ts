@@ -9,6 +9,8 @@ import { NavComponent } from './nav.component';
 import { WsStatusComponent } from './websocket-status.component';
 
 import { TableComponent } from './table.component';
+import { Chart1Component } from './charts/chart1.component';
+import { Chart2Component } from './charts/chart2.component';
 
 @NgModule({
   declarations: [
@@ -17,6 +19,8 @@ import { TableComponent } from './table.component';
       GlobalFiltersComponent,
       WsStatusComponent,
       TableComponent,
+      Chart1Component,
+      Chart2Component,
   ],
   imports: [
       FormsModule,

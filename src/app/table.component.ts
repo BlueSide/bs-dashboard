@@ -9,25 +9,33 @@ import { DataComponent, DataSet } from "./DataComponent";
 
 export class TableComponent extends DataComponent
 {
-    public values: string[] = []; 
-    
+    public dataSet1: DataSet;
+    public dataSet2: DataSet;
+
     constructor()
     {
         super();
         
-        let dataSet = new DataSet();
-        dataSet.resource = "https://bluesidenl.sharepoint.com/sites/dev/dashboard/_api/web/lists('3f891819-5635-47ff-81c1-992754c7859d')";
-        dataSet.query= "https://bluesidenl.sharepoint.com/sites/dev/dashboard/_api/web/lists('3f891819-5635-47ff-81c1-992754c7859d')/items?$select=Title,Integer";
+        this.dataSet1 = {
+            name: "Test DataSet 1",
+            resource: "https://bluesidenl.sharepoint.com/sites/dev/dashboard/_api/web/lists('3f891819-5635-47ff-81c1-992754c7859d')",
+            query: "https://bluesidenl.sharepoint.com/sites/dev/dashboard/_api/web/lists('3f891819-5635-47ff-81c1-992754c7859d')/items?$select=Title,Integer"
+        };
+
+        this.dataSet2 = {
+            name: "Test DataSet 2",
+            resource: "https://bluesidenl.sharepoint.com/sites/dev/dashboard/_api/web/lists('f995a606-71c5-40c9-809d-8d5684875adc')",
+            query: "https://bluesidenl.sharepoint.com/sites/dev/dashboard/_api/web/lists('f995a606-71c5-40c9-809d-8d5684875adc')/items?$select=Title,Site_x0020_URL"
+        };
         
-        this.addDataSet(dataSet);
+        this.addDataSet(this.dataSet1);
+        this.addDataSet(this.dataSet2);
     }
 
-    protected onUpdate(dataSet: any)
+    protected onUpdate(dataSet: DataSet)
     {
-        for(let result of dataSet.results)
-        {
-            this.values.push(result);
-        }
+        this.dataSet1 = this.getDataSetByName("Test DataSet 1");
+        this.dataSet2 = this.getDataSetByName("Test DataSet 2");
     }
    
 }
