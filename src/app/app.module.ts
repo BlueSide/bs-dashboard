@@ -5,17 +5,18 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { GlobalFiltersComponent } from './global-filters.component';
-import { ChartComponent } from './chart.component';
 import { NavComponent } from './nav.component';
-import { LiveUpdateComponent } from './live-update.component';
+import { WsStatusComponent } from './websocket-status.component';
+
+import { TableComponent } from './table.component';
 
 @NgModule({
   declarations: [
       AppComponent,
       NavComponent,
       GlobalFiltersComponent,
-      ChartComponent,
-      LiveUpdateComponent
+      WsStatusComponent,
+      TableComponent,
   ],
   imports: [
       FormsModule,

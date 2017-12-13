@@ -2,6 +2,20 @@
 $nav-top: 0px;
 $nav-width: 240px;
 
+
+.dashboard-title {
+    position: fixed;
+    top: $nav-top;
+    left: 0;
+    box-sizing: border-box;
+    background: #323d48;
+    color: #fff;
+    width: $nav-width;
+    padding: 40px 40px 60px 40px;
+    border-right: 1px #e5e5e5 solid;
+    overflow: auto;
+}
+
 .sidebar-left {
     position: fixed;
     top: $nav-top + 75px;
@@ -19,17 +33,10 @@ $nav-width: 240px;
     }
 }
 
-.dashboard-title {
-    position: fixed;
-    top: $nav-top;
-    left: 0;
-    box-sizing: border-box;
-    background: #323d48;
-    color: #fff;
-    width: $nav-width;
-    padding: 40px 40px 60px 40px;
-    border-right: 1px #e5e5e5 solid;
-    overflow: auto;
+.websocket-monitor {
+    position: absolute;
+    bottom: 0;
+    margin-bottom: 30px;
 }
 
 .uk-nav-default h6 {
@@ -41,7 +48,7 @@ $nav-width: 240px;
     margin-top: 30px;
 }
 
-.uk-nav-default>li>a {
+.uk-nav-default>li {
     color: #a5a5a5;
 }
 

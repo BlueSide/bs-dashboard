@@ -1,35 +1,59 @@
 import { OnInit } from '@angular/core';
-import { DashboardComponent } from './DashboardComponent';
 import { WebSocketService } from './WebSocketService';
 
-export abstract class DataComponent extends DashboardComponent implements OnInit
+export abstract class DataComponent implements OnInit
 {
-    //TODO: How do we expose this to the designer?
-    public readonly query = "https://bluesidenl.sharepoint.com/sites/dev/dashboard/_api/web/lists('3f891819-5635-47ff-81c1-992754c7859d')/items?$select=Title,Integer";
-    public readonly resource = "https://bluesidenl.sharepoint.com/sites/dev/dashboard/_api/web/lists('3f891819-5635-47ff-81c1-992754c7859d')";
 
-    protected dataQuery: string;
+    //protected dataSets: DataSet[];
     protected dataLoaded: boolean;
+    protected hasError: boolean;
 
     protected abstract onUpdate(data: any): void;
 
     constructor()
     {
-        super();
-        this.dataQuery = this.query;
         this.dataLoaded = false;
-        WebSocketService.subscribe(this);
     }
 
     ngOnInit()
     {
     }
 
-    onNewData(data: any)
+    protected addDataSet(dataSet: DataSet): void
     {
-        console.log(data);
+        //this.dataSets.push(dataSet);
+        WebSocketService.subscribe(dataSet, this);
+    }
+
+    onNewData(data: any): void
+    {
         this.dataLoaded = true;
+        this.hasError = false;
         this.onUpdate(data);
     }
 
+    onClose(): void
+    {
+        this.hasError = true;
+        //TODO: Semantically this is incorrect, refactor.
+        this.dataLoaded = true;
+    }
+    
+}
+
+export class DataSet
+{
+    resource: string;
+    query: string;
+    data: any;
+    dataComponent: DataComponent;
+    
+    constructor()
+    {
+    }
+
+    public equals(dataSet: DataSet): boolean
+    {
+        return (dataSet.query === this.query);
+    }
 }

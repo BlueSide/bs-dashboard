@@ -1,24 +1,20 @@
-import { Injectable } from '@angular/core';
-import { DataComponent } from './DataComponent';
+import { DataComponent, DataSet } from './DataComponent';
+import { Observable } from 'rxjs/Rx';
 
-@Injectable()
 export class WebSocketService
 {
-    //private readonly uri: string = "wss://blueside-sp-api.herokuapp.com/d";
-    private static socket: WebSocket;
-    private uri: string = "ws://localhost:8080/d";
+    //private readonly URI: string = "wss://blueside-sp-api.herokuapp.com/d";
+    private URI: string = "ws://localhost:8080/d";
+    private RECONNECT_INTERVAL: number = 1000; //milliseconds
 
-    private static subscriptions: DataComponent[];
+    public static socket: WebSocket;
+    //public static datasets: DataSet[];
+    public static subscriptions: Subscription[];
     
     constructor()
     {
         WebSocketService.subscriptions = [];
-        WebSocketService.socket = new WebSocket(this.uri);
-
-        WebSocketService.socket.addEventListener('open', this.onOpen.bind(this), false);
-        WebSocketService.socket.addEventListener('close', this.onClose.bind(this), false);
-        WebSocketService.socket.addEventListener('message', this.onMessage.bind(this), false);
-        WebSocketService.socket.addEventListener('error', this.onWebSocketError.bind(this), false);
+        this.connect();
     }
 
     
@@ -26,10 +22,8 @@ export class WebSocketService
     {
         //TODO: Set WebSocket status component to OK or something
         console.log("Websocket Opened.");
-
         for(let subscription of WebSocketService.subscriptions)
         {
-            // Subscribe to resource
             let payload: any = {
                 type: "subscription",
                 resource: subscription.resource,
@@ -39,16 +33,54 @@ export class WebSocketService
         }
     }
 
-
-    public static subscribe(dc: DataComponent)
+    private connect()
     {
-        WebSocketService.subscriptions.push(dc);
+        WebSocketService.socket = new WebSocket(this.URI);
+
+        WebSocketService.socket.addEventListener('open', this.onOpen.bind(this), false);
+        WebSocketService.socket.addEventListener('close', this.onClose.bind(this), false);
+        WebSocketService.socket.addEventListener('message', this.onMessage.bind(this), false);
+        WebSocketService.socket.addEventListener('error', this.onWebSocketError.bind(this), false);
+    }
+
+
+    public static subscribe(dataSet: DataSet, dataComponent: DataComponent)
+    {
+        // Add data set if a subscription for it already exists
+        for(let subscription of WebSocketService.subscriptions)
+        {
+            if(subscription.query === dataSet.query)
+            {
+                subscription.dataComponents.push(dataComponent);
+            }
+        }
+
+        // Create a new one if no query matches
+        let subscription: Subscription = {
+            resource: dataSet.resource,
+            query: dataSet.query,
+            dataComponents: [dataComponent]
+        };
+        
+        WebSocketService.subscriptions.push(subscription);
     }
     
     private onClose(event): void
     {
-        //TODO: Handle when the server is down
         console.warn("Websocket Closed.", event);
+
+        for(let subscription of WebSocketService.subscriptions)
+        {
+            for(let dataComponent of subscription.dataComponents)
+            {
+                dataComponent.onClose();
+            }
+        }
+
+        //STUDY: Is this timer being cleaned up?
+        //Retry the connection
+        let timer = Observable.timer(this.RECONNECT_INTERVAL);
+        timer.subscribe(this.connect.bind(this));
     }
     
     private onMessage(event): void
@@ -60,21 +92,26 @@ export class WebSocketService
             this.onSessionCreated(data);
             break;
         case "update":
-            let message: any = JSON.parse(data.message);
-
-            for(let dc of WebSocketService.subscriptions)
-            {
-                if(dc.resource === message.resource)
-                {
-                    dc.onNewData(message);
-                }
-            }
-
+            this.onUpdate(data.message);
             break;
 
         case "error":
-            this.onErrorMessage(message.message);
+            this.onErrorMessage(data);
             break;
+        }
+    }
+
+    private onUpdate(data: any)
+    {
+        let message: any = JSON.parse(data);
+
+        // Only update the actually updated dataset
+        for(let subscription of WebSocketService.subscriptions)
+        {
+            for(let dataComponent of subscription.dataComponents)
+            {
+                dataComponent.onNewData(message);
+            }
         }
     }
 
@@ -91,6 +128,12 @@ export class WebSocketService
     private onSessionCreated(data: any): void
     {
         console.log("Session created with ID: " + data.id);
-    }
-    
+    }   
+}
+
+export class Subscription
+{
+    resource: string;
+    query: string;
+    dataComponents: DataComponent[];
 }
