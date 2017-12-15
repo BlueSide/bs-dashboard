@@ -1,30 +1,30 @@
-/** theme.css **/
-$nav-top: 0px;
-$nav-width: 240px;
+@import "../variables.scss";
 
-
-.dashboard-title {
+.title-block {
     position: fixed;
-    top: $nav-top;
+    top: 0;
     left: 0;
     box-sizing: border-box;
     background: #323d48;
-    color: #fff;
     width: $nav-width;
-    padding: 40px 40px 60px 40px;
+    padding: 10px 40px 20px 40px;
     border-right: 1px #e5e5e5 solid;
     overflow: auto;
 }
 
+.title {
+    color: #fff;
+}
+
 .sidebar-left {
     position: fixed;
-    top: $nav-top + 75px;
+    top: 105px;
     bottom: 0;
     left: 0;
     box-sizing: border-box;
     background: #384250;
     width: $nav-width;
-    padding: 40px 40px 60px 40px;
+    padding: 46px 40px 60px 40px;
     border-right: 1px #e5e5e5 solid;
     overflow: auto;
 
@@ -48,8 +48,11 @@ $nav-width: 240px;
     margin-top: 30px;
 }
 
-.uk-nav-default>li {
-    color: #a5a5a5;
+.uk-nav-default {
+    li, a {
+        color: $nav-text-color;
+    }
+    
 }
 
 .uk-nav-default {

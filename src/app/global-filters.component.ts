@@ -8,21 +8,25 @@ import { Operator } from './Operator';
     styleUrls: ['global-filters.component.scss']
 })
 
-export class GlobalFiltersComponent
+export class GlobalFilters
 {
-    public filters: GlobalFilter[] = [];
+    public static callbacks: Function[] = [];
 
+    public filters: GlobalFilter[] = [];
+    
     constructor()
     {
-        this.filters.push(new GlobalFilter("First filter"));
-        this.filters.push(new GlobalFilter("Second filter"));
-        this.filters.push(new GlobalFilter("Third filter"));
-        this.filters.push(new GlobalFilter("Fourth filter"));
+        this.filters.push(new GlobalFilter("Test"));
     }
 
     toggle(index)
     {
         this.filters[index].selected = !this.filters[index].selected;
+
+        for(let callback of GlobalFilters.callbacks)
+        {
+            callback(this.filters[index].selected);
+        }
     }
     
 }

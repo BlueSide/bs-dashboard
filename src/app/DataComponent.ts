@@ -1,23 +1,22 @@
-import { OnInit } from '@angular/core';
+import { GlobalFilters } from './global-filters.component';
 import { WebSocketService } from './WebSocketService';
 
-export abstract class DataComponent implements OnInit
+export abstract class DataComponent
 {
 
     protected dataSets: DataSet[];
     protected dataLoaded: boolean;
     protected hasError: boolean;
 
-    protected abstract onUpdate(dataSet: DataSet): void;
+    private test: boolean;
 
+    protected abstract onUpdate(dataSet: DataSet): void;
+    
     constructor()
     {
         this.dataSets = [];
         this.dataLoaded = false;
-    }
-
-    ngOnInit()
-    {
+        GlobalFilters.callbacks.push(this.onFilterChange.bind(this));
     }
 
     protected addDataSet(dataSet: DataSet): void
@@ -26,18 +25,60 @@ export abstract class DataComponent implements OnInit
         WebSocketService.subscribe(dataSet, this);
     }
 
-    onNewData(data: any): void
+    private onFilterChange(test: boolean): void
     {
-        // Decide if this message is for us
-
+        this.test = test;
         for(let dataSet of this.dataSets)
         {
-            if(data.query === dataSet.query)
+            console.log(dataSet.unfilteredData);
+            dataSet.data = this.filter(dataSet.unfilteredData);
+            this.onUpdate(dataSet);
+        }
+    }
+
+    clone(obj)
+    {
+        if(obj == null || typeof(obj) != 'object')
+            return obj;
+
+        var temp = new obj.constructor(); 
+        for(var key in obj)
+            temp[key] = this.clone(obj[key]);
+
+        return temp;
+    }
+    
+    protected filter(data: any[]): any[]
+    {
+        let filteredData = this.clone(data);
+
+        if(this.test)
+        {
+            for(let i = 0; i < filteredData.length; ++i)
             {
-                dataSet.data = data.results;
+                filteredData[i].Integer -= 20;
+            }
+        }
+        else
+        {
+            filteredData = this.clone(data);
+        }
+        
+        return filteredData;
+    }
+
+    onNewData(newData: any): void
+    {
+        // Decide if this message is for us
+        for(let dataSet of this.dataSets)
+        {
+            if(newData.query === dataSet.query)
+            {
+                dataSet.unfilteredData = newData.results;
                 this.dataLoaded = true;
                 this.hasError = false;
-                this.onUpdate(this.getDataSetByQuery(data.query));
+                dataSet.data = this.filter(newData.results);
+                this.onUpdate(dataSet);
             }
         }
     }
@@ -80,8 +121,16 @@ export abstract class DataComponent implements OnInit
 export interface DataSet
 {
     name?: string;
+    type: DataType;
     resource: string;
     query: string;
     data?: any;
+    unfilteredData?: any;
     dataComponent?: DataComponent;
+}
+
+
+export enum DataType
+{
+    SHAREPOINT = "sp",
 }

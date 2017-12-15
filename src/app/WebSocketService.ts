@@ -1,10 +1,11 @@
-import { DataComponent, DataSet } from './DataComponent';
+import { DataComponent, DataSet, DataType } from './DataComponent';
 import { Observable } from 'rxjs/Rx';
+import { environment } from '../environments/environment';
 
 export class WebSocketService
 {
     //private readonly URI: string = "wss://blueside-sp-api.herokuapp.com/d";
-    private URI: string = "ws://localhost:8080/d";
+    //private URI: string = "ws://localhost:8080/d";
     private RECONNECT_INTERVAL: number = 1000; //milliseconds
 
     public static socket: WebSocket;
@@ -35,7 +36,7 @@ export class WebSocketService
 
     private connect()
     {
-        WebSocketService.socket = new WebSocket(this.URI);
+        WebSocketService.socket = new WebSocket(environment.websocketUri);
 
         WebSocketService.socket.addEventListener('open', this.onOpen.bind(this), false);
         WebSocketService.socket.addEventListener('close', this.onClose.bind(this), false);
@@ -44,14 +45,16 @@ export class WebSocketService
     }
 
 
-    public static subscribe(dataSet: DataSet, dataComponent: DataComponent)
+    public static subscribe(dataSet: DataSet, dataComponent: DataComponent): void
     {
         // Add data set if a subscription for it already exists
         for(let subscription of WebSocketService.subscriptions)
         {
+            console.log(subscription);
             if(subscription.query === dataSet.query)
             {
                 subscription.dataComponents.push(dataComponent);
+                return;
             }
         }
 
@@ -59,6 +62,7 @@ export class WebSocketService
         let subscription: Subscription = {
             resource: dataSet.resource,
             query: dataSet.query,
+            type: dataSet.type,
             dataComponents: [dataComponent]
         };
         
@@ -86,6 +90,7 @@ export class WebSocketService
     private onMessage(event): void
     {
         let data: any = JSON.parse(event.data);
+        
         switch(data.type)
         {
         case "session_created":
@@ -135,5 +140,6 @@ export class Subscription
 {
     resource: string;
     query: string;
+    type: DataType;
     dataComponents: DataComponent[];
 }

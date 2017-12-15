@@ -6,11 +6,11 @@
         </tr>
     </thead>
     <tbody>
-        <tr *ngFor="let data of dataSet1.data">
-            <td>{{data.Title}}</td>
-            <td>{{data.Integer}}</td>
+        <tr *ngFor="let item of dataSets[0].data">
+            <td>{{item.Title}}</td>
+            <td>{{item.Integer}}</td>
         </tr>
-        <tr *ngFor="let data of dataSet2.data">
+        <tr *ngFor="let data of dataSets[1].data">
             <td>{{data.Title}}</td>
             <td>{{data.Site_x0020_URL}}</td>
         </tr>

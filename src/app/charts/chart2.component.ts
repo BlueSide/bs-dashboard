@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { DataComponent, DataSet } from '../DataComponent';
+import { DataComponent, DataSet, DataType } from '../DataComponent';
 import { BSChart, ChartObject, ChartType } from '../BSChart';
+import { Chart } from 'chart.js';
 
 @Component({ 
     selector: 'chart2',
@@ -13,7 +14,10 @@ export class Chart2Component extends DataComponent implements OnInit
 
     @ViewChild('canvas') canvas: ElementRef;
 
-    protected chart: BSChart;
+    protected chart: Chart;
+
+    asdf: boolean = false;
+
     
     constructor()
     {
@@ -21,12 +25,14 @@ export class Chart2Component extends DataComponent implements OnInit
 
         let dataSet1: DataSet = {
             name: "Test DataSet 1",
+            type: DataType.SHAREPOINT,
             resource: "https://bluesidenl.sharepoint.com/sites/dev/dashboard/_api/web/lists('3f891819-5635-47ff-81c1-992754c7859d')",
             query: "https://bluesidenl.sharepoint.com/sites/dev/dashboard/_api/web/lists('3f891819-5635-47ff-81c1-992754c7859d')/items?$select=Title,Integer"
         };
 
         let dataSet2: DataSet = {
-            name: "Test DataSet 1",
+            name: "Test DataSet 2",
+            type: DataType.SHAREPOINT,
             resource: "https://bluesidenl.sharepoint.com/sites/dev/dashboard/_api/web/lists('3f891819-5635-47ff-81c1-992754c7859d')",
             query: "https://bluesidenl.sharepoint.com/sites/dev/dashboard/_api/web/lists('3f891819-5635-47ff-81c1-992754c7859d')/items?$select=Title,Number",
         };
@@ -49,7 +55,12 @@ export class Chart2Component extends DataComponent implements OnInit
                     type: ChartType.LINE,
                     label: 'CRL',
                     backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                }]
+                },
+                 {
+                    label: 'CRL',
+                    backgroundColor: 'rgba(255,99,132, 1)',
+                }
+]
             },
             options: {
                 responsive: true,
@@ -58,7 +69,7 @@ export class Chart2Component extends DataComponent implements OnInit
                 },
                 tooltips: {
                     mode: 'point'
-                }
+                },
                 scales: {
                     yAxes: [{
                         ticks: {
@@ -72,27 +83,42 @@ export class Chart2Component extends DataComponent implements OnInit
         this.chart = new BSChart(this.canvas, chartObject);
     }
 
+    
     protected onUpdate(dataSet: DataSet): void
     {
-        let integers: number[] = [];
-        let labels: string[] = [];
         
+        let titles: string[] = []
+        let integers: number[] = []
+        let numbers: number[] = []
+
         for(let item of this.dataSets[0].data)
         {
+            titles.push(item.Title);
             integers.push(item.Integer);
-            labels.push(item.Title);
-        }     
+        }
 
-        let numbers: number[] = [];
-
-        for(let item of this.dataSets[1].data)
+        //FIXME: onUpdate is called after dataSet[0] is filled/filtered, but then dataSet[1] is
+        // not yet defined!!!
+        console.log(this.dataSets[1].data);
+        if(typeof this.dataSets[1].data != 'undefined')
         {
-            numbers.push(item.Number);
-        }     
+            for(let item of this.dataSets[1].data)
+            {
+                numbers.push(item.Number);
+            }     
+            this.chart.data.datasets[1].data = numbers;
+        }
 
-        this.chart.chart.data.labels = labels;
-        this.chart.chart.data.datasets[0].data = integers;
-        this.chart.chart.data.datasets[1].data = numbers;
-        this.chart.chart.update();
+        this.chart.data.datasets[2].data = integers;
+        this.chart.data.labels = titles;
+
+        if(!this.asdf)
+        {
+            console.log("zxcv");
+            this.chart.data.datasets[0].data = integers;
+            this.asdf = true;
+        }
+        
+        this.chart.update();
     }
 }

@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
-import { GlobalFiltersComponent } from './global-filters.component';
+import { GlobalFilters } from './global-filters.component';
 import { NavComponent } from './nav.component';
 import { WsStatusComponent } from './websocket-status.component';
 
@@ -16,7 +16,7 @@ import { Chart2Component } from './charts/chart2.component';
   declarations: [
       AppComponent,
       NavComponent,
-      GlobalFiltersComponent,
+      GlobalFilters,
       WsStatusComponent,
       TableComponent,
       Chart1Component,

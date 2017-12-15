@@ -3,8 +3,9 @@ import { WebSocketService } from './WebSocketService';
 
 @Component({ 
     selector: 'websocket-status',
-    templateUrl: 'websocket-status.component.html',
-    styleUrls: ['websocket-status.component.scss']
+    template:
+    '<span *ngIf="isWebSocketOpen"><span class="uk-margin-small-right" style="color: green;" uk-icon="icon: check"></span>Websocket OK</span>'
+    + '<span *ngIf="!isWebSocketOpen"><span class="uk-margin-small-right" style="color: red;" uk-icon="icon: warning"></span>Websocket Closed</span>',
 })
 
 

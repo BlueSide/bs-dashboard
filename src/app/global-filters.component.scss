@@ -1,7 +1,7 @@
-@import "../styles.scss";
+@import "../variables.scss";
 
 $label-side-padding: 14px;
-$glyphicon-size: 14px;
+$icon-size: 20px;
 
 label {
     padding: 3px;
@@ -10,32 +10,22 @@ label {
     width: 100%;
     font-weight: 400;
     user-select: none;
-
+    cursor: pointer;
+    color: $nav-text-color;
     .selected {
         background-color: aqua;
     }
 }
 
-label:hover {
-    background-color: $hover-color;
-}
-
-input[type=checkbox] {
-    display:none;
-}
-
-.noglyphicon {
+.placeholder {
     display: inline-block;
-    width: $glyphicon-size;
-    height: $glyphicon-size;
+    width: $icon-size;
 }
-
-.spacer {
-    display: inline-block;
-    width: 6px;
-}
-
 
 .header {
     background-color: $panel-header-color;
+}
+
+li {
+    line-height: $icon-size + 5px;
 }

@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { DataComponent, DataSet } from '../DataComponent';
+import { DataComponent, DataSet, DataType } from '../DataComponent';
 import { BSChart, ChartObject, ChartType } from '../BSChart';
+import { Chart } from 'chart.js';
 
 @Component({ 
     selector: 'chart1',
@@ -13,7 +14,7 @@ export class Chart1Component extends DataComponent implements OnInit
 
     @ViewChild('canvas') canvas: ElementRef;
 
-    protected chart: BSChart;
+    protected chart: Chart;
 
     constructor()
     {
@@ -21,6 +22,7 @@ export class Chart1Component extends DataComponent implements OnInit
 
         let dataSet: DataSet = {
             name: "Test DataSet 1",
+            type: DataType.SHAREPOINT,
             resource: "https://bluesidenl.sharepoint.com/sites/dev/dashboard/_api/web/lists('3f891819-5635-47ff-81c1-992754c7859d')",
             query: "https://bluesidenl.sharepoint.com/sites/dev/dashboard/_api/web/lists('3f891819-5635-47ff-81c1-992754c7859d')/items?$select=Title,Integer"
         };
@@ -34,7 +36,6 @@ export class Chart1Component extends DataComponent implements OnInit
             type: ChartType.PIE,
             data: {
                 datasets: [{
-                    label: 'CRL',
                     backgroundColor: [
                         'rgba(255, 99, 132, 0.7)',
                         'rgba(54, 162, 235, 0.7)',
@@ -46,15 +47,16 @@ export class Chart1Component extends DataComponent implements OnInit
                 }]
             },
             options: {
-                cutoutPercentage: 75;
+                cutoutPercentage: 75,
                 responsive: true,
                 legend: {
                     position: 'right'
                 }
             }
         };
-        
+
         this.chart = new BSChart(this.canvas, chartObject);
+        this.chart.options.onClick = this.onClick;
     }
 
     protected onUpdate(dataSet: DataSet): void
@@ -68,8 +70,13 @@ export class Chart1Component extends DataComponent implements OnInit
             labels.push(item.Title);
         }     
         
-        this.chart.chart.data.labels = labels;
-        this.chart.chart.data.datasets[0].data = integers;
-        this.chart.chart.update();
+        this.chart.data.labels = labels;
+        this.chart.data.datasets[0].data = integers;
+        this.chart.update();
+    }
+
+    onClick(event)
+    {
+        console.log(this.chart.getElementsAtEvent(event));
     }
 }

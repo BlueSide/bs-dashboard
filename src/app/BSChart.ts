@@ -1,14 +1,12 @@
 import { ElementRef } from '@angular/core';
 import { Chart } from 'chart.js';
 
-export class BSChart
+export class BSChart extends Chart
 {
-    public chart: Chart;
-    
     constructor(canvas: ElementRef, chartObject: ChartObject)
     {
         let context = canvas.nativeElement.getContext('2d');
-        this.chart = new Chart(context, chartObject);
+        super(context, chartObject);
     }
 }
 

@@ -1,8 +1,6 @@
 export class GlobalFilter
 {
-
-    public selected: boolean;
-    
+    public selected: boolean;    
     private name: string;
     
     constructor(name: string)
