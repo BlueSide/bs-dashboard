@@ -3,10 +3,13 @@ import { Chart } from 'chart.js';
 
 export class BSChart extends Chart
 {
+    public urls: string[];
+    
     constructor(canvas: ElementRef, chartObject: ChartObject)
     {
         let context = canvas.nativeElement.getContext('2d');
         super(context, chartObject);
+        this.urls = [];
     }
 }
 

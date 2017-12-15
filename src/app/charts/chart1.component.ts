@@ -57,6 +57,10 @@ export class Chart1Component extends DataComponent implements OnInit
 
         this.chart = new BSChart(this.canvas, chartObject);
         this.chart.options.onClick = this.onClick;
+        this.chart.urls = [
+            "http://www.blueside.nl/",
+            "http://bluesidenl.sharepoint.com/"
+        ];
     }
 
     protected onUpdate(dataSet: DataSet): void
@@ -77,6 +81,12 @@ export class Chart1Component extends DataComponent implements OnInit
 
     onClick(event)
     {
-        console.log(this.chart.getElementsAtEvent(event));
+        if(typeof this.chart.getElementsAtEvent(event)[0]._index != 'undefined'
+          && this.urls[sliceIndex])
+        {
+            let sliceIndex = this.chart.getElementsAtEvent(event)[0]._index;
+            window.open(this.urls[sliceIndex]);
+        }
     }
 }
+
