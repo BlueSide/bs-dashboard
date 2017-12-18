@@ -1,15 +1,21 @@
 export class Filter
 {
-    private filter: any;
+    public filter: any;
     
-    constructor(filter: string)
+    constructor(filter: any)
     {
-        this.filter = this.stringToFilterObject(filter);
+        this.filter = filter;
     }
+}
 
-    stringToFilterObject(input: string): any
+export class GlobalFilter extends Filter
+{
+    public selected: boolean = false;
+    public name: string;
+
+    constructor(name: string, filter: any)
     {
-        console.log(input);
-        return {};
+        super(filter);
+        this. name = name;
     }
 }

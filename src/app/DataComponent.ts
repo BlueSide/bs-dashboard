@@ -1,15 +1,16 @@
-import { GlobalFilters } from './global-filters.component';
+import { GlobalFilters } from './GlobalFilters';
+import { Filter } from './Filter';
 import { WebSocketService } from './WebSocketService';
 
 export abstract class DataComponent
 {
 
-    protected dataSets: DataSet[];
+    protected dataSets: DataSet[] = [];
     protected dataLoaded: boolean;
     protected hasError: boolean;
-
-    private test: boolean;
-
+    protected localFilters: Filter[] = [];
+    protected filters: Filter[] = [];
+    
     protected abstract onUpdate(dataSet: DataSet): void;
     
     constructor()
@@ -19,55 +20,50 @@ export abstract class DataComponent
         GlobalFilters.callbacks.push(this.onFilterChange.bind(this));
     }
 
+    protected filter(data: any[]): any[]
+    {
+        //Return immediately if we don't need to filter anything
+        if(this.filters.length === 0)
+        {
+            return data;
+        }
+
+        let filteredData: any[] = [];
+        
+        //TODO: Implement the actual filtering
+        for(let filter of this.filters)
+        {
+            for(let item of data)
+            {
+                if(filter.filter(item))
+                {
+                    filteredData.push(item);
+                }
+            }
+        }
+
+        return filteredData;
+    }
+
     protected addDataSet(dataSet: DataSet): void
     {
         this.dataSets.push(dataSet);
         WebSocketService.subscribe(dataSet, this);
     }
 
-    private onFilterChange(test: boolean): void
+    private onFilterChange(): void
     {
-        this.test = test;
+        this.filters = [];
+        this.filters = GlobalFilters.getFilters().concat(this.localFilters);
+
         for(let dataSet of this.dataSets)
         {
-            console.log(dataSet.unfilteredData);
             dataSet.data = this.filter(dataSet.unfilteredData);
             this.onUpdate(dataSet);
         }
     }
 
-    clone(obj)
-    {
-        if(obj == null || typeof(obj) != 'object')
-            return obj;
-
-        var temp = new obj.constructor(); 
-        for(var key in obj)
-            temp[key] = this.clone(obj[key]);
-
-        return temp;
-    }
-    
-    protected filter(data: any[]): any[]
-    {
-        let filteredData = this.clone(data);
-
-        if(this.test)
-        {
-            for(let i = 0; i < filteredData.length; ++i)
-            {
-                filteredData[i].Integer -= 20;
-            }
-        }
-        else
-        {
-            filteredData = this.clone(data);
-        }
-        
-        return filteredData;
-    }
-
-    onNewData(newData: any): void
+    public onNewData(newData: any): void
     {
         // Decide if this message is for us
         for(let dataSet of this.dataSets)
@@ -83,11 +79,16 @@ export abstract class DataComponent
         }
     }
     
-    onClose(): void
+    public onClose(): void
     {
         this.hasError = true;
         //TODO: Semantically this is incorrect, refactor.
-        this.dataLoaded = true;
+        //this.dataLoaded = true;
+    }
+
+    protected addFilter(filter: Filter): void
+    {
+        this.localFilters.push(filter);
     }
 
     protected getDataSetByQuery(query: string): DataSet
@@ -124,8 +125,8 @@ export interface DataSet
     type: DataType;
     resource: string;
     query: string;
-    data?: any;
-    unfilteredData?: any;
+    data?: any[];
+    unfilteredData?: any[];
     dataComponent?: DataComponent;
 }
 

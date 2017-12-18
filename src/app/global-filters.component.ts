@@ -1,31 +1,28 @@
 import { Component } from '@angular/core';
-import { GlobalFilter } from './GlobalFilter';
-import { Operator } from './Operator';
-
+import { GlobalFilter } from './Filter';
+import { GlobalFilters } from './GlobalFilters';
 @Component({ 
     selector: 'global-filters',
     templateUrl: 'global-filters.component.html',
     styleUrls: ['global-filters.component.scss']
 })
 
-export class GlobalFilters
+export class GlobalFiltersComponent extends GlobalFilters
 {
-    public static callbacks: Function[] = [];
+    public filters: GlobalFilter[] = GlobalFilters.filters;
 
-    public filters: GlobalFilter[] = [];
-    
     constructor()
     {
-        this.filters.push(new GlobalFilter("Test"));
+        super();
     }
 
     toggle(index)
     {
-        this.filters[index].selected = !this.filters[index].selected;
+        GlobalFilters.filters[index].selected = !GlobalFilters.filters[index].selected;
 
         for(let callback of GlobalFilters.callbacks)
         {
-            callback(this.filters[index].selected);
+            callback(GlobalFilters);
         }
     }
     

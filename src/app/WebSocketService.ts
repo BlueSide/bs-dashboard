@@ -21,8 +21,6 @@ export class WebSocketService
     
     public onOpen(event): void
     {
-        //TODO: Set WebSocket status component to OK or something
-        console.log("Websocket Opened.");
         for(let subscription of WebSocketService.subscriptions)
         {
             let payload: any = {
@@ -50,7 +48,6 @@ export class WebSocketService
         // Add data set if a subscription for it already exists
         for(let subscription of WebSocketService.subscriptions)
         {
-            console.log(subscription);
             if(subscription.query === dataSet.query)
             {
                 subscription.dataComponents.push(dataComponent);

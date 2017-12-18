@@ -1,7 +1,9 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Chart } from 'chart.js';
+
 import { DataComponent, DataSet, DataType } from '../DataComponent';
 import { BSChart, ChartObject, ChartType } from '../BSChart';
-import { Chart } from 'chart.js';
+import { Filter } from '../Filter';
 
 @Component({ 
     selector: 'chart1',
@@ -81,11 +83,12 @@ export class Chart1Component extends DataComponent implements OnInit
 
     onClick(event)
     {
+        console.log(this.chart.getElementsAtEvent(event));
+        let sliceIndex = this.chart.getElementsAtEvent(event)[0]._index;
         if(typeof this.chart.getElementsAtEvent(event)[0]._index != 'undefined'
-          && this.urls[sliceIndex])
+          && this.chart.urls[sliceIndex])
         {
-            let sliceIndex = this.chart.getElementsAtEvent(event)[0]._index;
-            window.open(this.urls[sliceIndex]);
+            window.open(this.chart.urls[sliceIndex]);
         }
     }
 }

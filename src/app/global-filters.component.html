@@ -1,6 +1,6 @@
 <li *ngFor="let filter of filters; let i = index">
     <label>
-        <input [hidden]="true" [checked]="filter.selected" (change)="toggle(i)" type="checkbox" />
+        <input [hidden]="true" (change)="toggle(i)" type="checkbox" />
         <span *ngIf="!filter.selected" class="placeholder"></span>
         <span *ngIf="filter.selected" uk-icon="icon: check"></span>
         {{filter.name}}
