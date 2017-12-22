@@ -7,11 +7,19 @@ export class GlobalFilters
 
     constructor()
     {
-        let filter = new GlobalFilter("Integer > 30", function (item) {
-                return item.Integer > 35;
-        })
+        let filter = new GlobalFilter(
+            "Integer > 30",
+            function (item): boolean
+            {
+                if(item.Integer != undefined)
+                {
+                    return item.Integer > 35;    
+                }
+                return true;
+            }
+        );
 
-        GlobalFilters.filters.push(filter);
+        GlobalFilters.addFilter(filter);
     }
 
     public static getFilters(): Filter[]
@@ -28,4 +36,10 @@ export class GlobalFilters
 
         return filters;
     }
+
+    public static addFilter(filter: GlobalFilter): void
+    {
+        GlobalFilters.filters.push(filter);        
+    }
+        
 }

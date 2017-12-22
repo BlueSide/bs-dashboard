@@ -1,0 +1,15 @@
+<div class="container">
+    
+    <h2>Random Poke&#769;mon</h2>
+    <div class="spinner" [hidden]="dataLoaded" uk-spinner="ratio: 2"></div>
+    <div *ngIf="dataLoaded">
+        <h1>{{name}}</h1>
+        <img  [src]="imageSrc" />
+        <div>
+            Types:
+            <ul>
+                <li *ngFor="let type of types">{{type.type.name}}</li>
+            </ul>        
+        </div>
+    </div>
+</div>

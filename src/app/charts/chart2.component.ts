@@ -22,7 +22,8 @@ export class Chart2Component extends DataComponent implements OnInit
     constructor()
     {
         super();
-
+        this.id = 3;
+        
         let dataSet1: DataSet = {
             name: "Test DataSet 1",
             type: DataType.SHAREPOINT,
@@ -59,8 +60,7 @@ export class Chart2Component extends DataComponent implements OnInit
                  {
                     label: 'CRL',
                     backgroundColor: 'rgba(255,99,132, 1)',
-                }
-]
+                }]
             },
             options: {
                 responsive: true,
@@ -86,39 +86,42 @@ export class Chart2Component extends DataComponent implements OnInit
     
     protected onUpdate(dataSet: DataSet): void
     {
+        this.chart.data.datasets[0].data = [];
+        this.chart.data.datasets[2].data = [];
+        this.chart.data.labels = [];
         
-        let titles: string[] = []
-        let integers: number[] = []
-        let numbers: number[] = []
-
-        for(let item of this.dataSets[0].data)
+        for(let i in this.dataSets[0].data)
         {
-            titles.push(item.Title);
-            integers.push(item.Integer);
+            this.chart.data.datasets[0].data.push(this.dataSets[0].data[i].Integer);
+            this.chart.data.datasets[2].data.push(this.dataSets[0].unfilteredData[i].Integer);
+            this.chart.data.labels.push(this.dataSets[0].data[i].Title);
         }
 
-        //FIXME: onUpdate is called after dataSet[0] is filled/filtered, but then dataSet[1] is
-        // not yet defined!!!
-        console.log(this.dataSets[1].data);
-        if(typeof this.dataSets[1].data != 'undefined')
+        if(this.dataSets[1].data != undefined)
         {
+            this.chart.data.datasets[1].data = [];
             for(let item of this.dataSets[1].data)
             {
-                numbers.push(item.Number);
-            }     
-            this.chart.data.datasets[1].data = numbers;
+                this.chart.data.datasets[1].data.push(item.Number);
+            }
+            
+            this.chart.update();
         }
-
-        this.chart.data.datasets[2].data = integers;
-        this.chart.data.labels = titles;
-
-        if(!this.asdf)
+        /*
+        console.log(dataSet);
+        if(dataSet.name === "Test DataSet 1")
         {
-            console.log("zxcv");
-            this.chart.data.datasets[0].data = integers;
-            this.asdf = true;
+            console.log("asdf");
+            this.chart.labels = [];
+            this.chart.data.datasets[0].data = [];
+            for(let item of dataSet.data)
+            {
+                this.chart.labels.push(item.Title);
+                this.chart.data.datasets[0].data.push(item.Iteger);
+            }
         }
         
         this.chart.update();
+*/
     }
 }

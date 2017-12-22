@@ -1,4 +1,4 @@
 export const environment = {
     production: true,
-    websocketUri: 'wss://blueside-sp-api.herokuapp.com/d',
+    websocketUri: 'wss://blue-side-api.herokuapp.com/d',
 };

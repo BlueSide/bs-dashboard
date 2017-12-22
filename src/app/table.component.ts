@@ -10,9 +10,12 @@ import { DataComponent, DataSet, DataType } from "./DataComponent";
 export class TableComponent extends DataComponent
 {
 
+    private urls: Map<string, string>;
+    
     constructor()
     {
         super();
+        this.id = 2;
         
         let dataSet1 = {
             name: "Test DataSet 1",
@@ -30,11 +33,23 @@ export class TableComponent extends DataComponent
         
         this.addDataSet(dataSet1);
         this.addDataSet(dataSet2);
+
+        this.urls = new Map();
+        this.urls.set("asdf", "http://www.google.com");
+        this.urls.set("Test Entry", "http://www.reddit.com");
     }
 
     protected onUpdate(dataSet: DataSet)
     {
         // Everything is handled by the template!
+    }
+
+    public onClick(item)
+    {
+        if(this.urls.get(item.Title) !== undefined)
+        {
+            window.open(this.urls.get(item.Title));
+        }
     }
    
 }

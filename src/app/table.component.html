@@ -6,7 +6,7 @@
         </tr>
     </thead>
     <tbody>
-        <tr *ngFor="let item of dataSets[0].data">
+        <tr *ngFor="let item of dataSets[0].data" (click)="onClick(item)">
             <td>{{item.Title}}</td>
             <td>{{item.Integer}}</td>
         </tr>

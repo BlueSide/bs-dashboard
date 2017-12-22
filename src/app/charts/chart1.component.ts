@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { Chart } from 'chart.js';
+import { Chart, ChartElement } from 'chart.js';
 
 import { DataComponent, DataSet, DataType } from '../DataComponent';
 import { BSChart, ChartObject, ChartType } from '../BSChart';
@@ -11,6 +11,7 @@ import { Filter } from '../Filter';
     styleUrls: ['../chart.component.scss']
 })
 
+//TODO: Make Chart Component and encapsulate the Chart objects etc.
 export class Chart1Component extends DataComponent implements OnInit
 {
 
@@ -21,6 +22,7 @@ export class Chart1Component extends DataComponent implements OnInit
     constructor()
     {
         super();
+        this.id = 1;
 
         let dataSet: DataSet = {
             name: "Test DataSet 1",
@@ -32,7 +34,7 @@ export class Chart1Component extends DataComponent implements OnInit
         this.addDataSet(dataSet);
     }
 
-    ngOnInit(): void
+    public ngOnInit(): void
     {
         let chartObject: ChartObject = {
             type: ChartType.PIE,
@@ -58,11 +60,12 @@ export class Chart1Component extends DataComponent implements OnInit
         };
 
         this.chart = new BSChart(this.canvas, chartObject);
-        this.chart.options.onClick = this.onClick;
-        this.chart.urls = [
-            "http://www.blueside.nl/",
-            "http://bluesidenl.sharepoint.com/"
-        ];
+        this.chart.options.onClick = this.onClick.bind(this);
+
+        //TODO: Dynamic SP views?
+        //NOTE: Urls are always mapped to labels in this implementation
+        this.chart.addUrl("Test Entry", "http://www.blueside.nl/");
+        this.chart.addUrl("asdf", "https://bluesidenl.sharepoint.com/");
     }
 
     protected onUpdate(dataSet: DataSet): void
@@ -81,14 +84,14 @@ export class Chart1Component extends DataComponent implements OnInit
         this.chart.update();
     }
 
-    onClick(event)
+    public onClick(event)
     {
-        console.log(this.chart.getElementsAtEvent(event));
-        let sliceIndex = this.chart.getElementsAtEvent(event)[0]._index;
-        if(typeof this.chart.getElementsAtEvent(event)[0]._index != 'undefined'
-          && this.chart.urls[sliceIndex])
+        let elements: ChartElement = this.chart.getElementsAtEvent(event);
+
+        if(elements.length > 0 && this.chart.urls.get(elements[0]._model.label) !== undefined)
         {
-            window.open(this.chart.urls[sliceIndex]);
+            //TODO: Support mixed charts?
+            window.open(this.chart.urls.get(elements[0]._model.label));
         }
     }
 }

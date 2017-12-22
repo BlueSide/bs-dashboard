@@ -9,5 +9,5 @@ import { environment } from '../environments/environment';
 
 export class NavComponent
 {
-    private devBuild = environment.production;
+    devBuild = environment.production;
 }

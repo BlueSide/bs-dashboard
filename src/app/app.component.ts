@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { WebSocketService } from './WebSocketService';
+import { Database } from './Database';
+
 
 declare var UIkit: any;
 
@@ -15,9 +17,11 @@ export class AppComponent
     public liveUpdate: boolean = true;
 
     private webSocketService: WebSocketService;
+    private database: Database;
     
     constructor()
     {
         this.webSocketService = new WebSocketService();
+        this.database = new Database();
     }
 }

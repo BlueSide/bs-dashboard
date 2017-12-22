@@ -10,24 +10,26 @@ export class WebSocketService
 
     public static socket: WebSocket;
     //public static datasets: DataSet[];
-    public static subscriptions: Subscription[];
+    public static dataResources: DataResource[];
     
     constructor()
     {
-        WebSocketService.subscriptions = [];
+        WebSocketService.dataResources = [];
         this.connect();
     }
 
     
     public onOpen(event): void
     {
-        for(let subscription of WebSocketService.subscriptions)
+        for(let dataResource of WebSocketService.dataResources)
         {
             let payload: any = {
                 type: "subscription",
-                resource: subscription.resource,
-                query: subscription.query,
+                resource: dataResource.resource,
+                query: dataResource.query,
+                sourceType: dataResource.type,
             };
+
             WebSocketService.socket.send(JSON.stringify(payload));
         }
     }
@@ -46,48 +48,48 @@ export class WebSocketService
     public static subscribe(dataSet: DataSet, dataComponent: DataComponent): void
     {
         // Add data set if a subscription for it already exists
-        for(let subscription of WebSocketService.subscriptions)
+        for(let dataResource of WebSocketService.dataResources)
         {
-            if(subscription.query === dataSet.query)
+            if(dataResource.query === dataSet.query)
             {
-                subscription.dataComponents.push(dataComponent);
+                dataResource.dataComponents.push(dataComponent);
                 return;
             }
         }
 
         // Create a new one if no query matches
-        let subscription: Subscription = {
+        let dataResource: DataResource = {
             resource: dataSet.resource,
             query: dataSet.query,
             type: dataSet.type,
             dataComponents: [dataComponent]
         };
         
-        WebSocketService.subscriptions.push(subscription);
+        WebSocketService.dataResources.push(dataResource);
     }
     
     private onClose(event): void
     {
         console.warn("Websocket Closed.", event);
 
-        for(let subscription of WebSocketService.subscriptions)
+        for(let dataResource of WebSocketService.dataResources)
         {
-            for(let dataComponent of subscription.dataComponents)
+            for(let dataComponent of dataResource.dataComponents)
             {
                 dataComponent.onClose();
             }
         }
 
+        //FIXME: This is not working in a production build somehow
         //STUDY: Is this timer being cleaned up?
         //Retry the connection
-        let timer = Observable.timer(this.RECONNECT_INTERVAL);
+        let timer = Observable.timer(0, this.RECONNECT_INTERVAL);
         timer.subscribe(this.connect.bind(this));
     }
     
     private onMessage(event): void
     {
         let data: any = JSON.parse(event.data);
-        
         switch(data.type)
         {
         case "session_created":
@@ -108,9 +110,9 @@ export class WebSocketService
         let message: any = JSON.parse(data);
 
         // Only update the actually updated dataset
-        for(let subscription of WebSocketService.subscriptions)
+        for(let dataResource of WebSocketService.dataResources)
         {
-            for(let dataComponent of subscription.dataComponents)
+            for(let dataComponent of dataResource.dataComponents)
             {
                 dataComponent.onNewData(message);
             }
@@ -133,7 +135,7 @@ export class WebSocketService
     }   
 }
 
-export class Subscription
+export class DataResource
 {
     resource: string;
     query: string;

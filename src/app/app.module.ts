@@ -11,6 +11,7 @@ import { WsStatusComponent } from './websocket-status.component';
 import { TableComponent } from './table.component';
 import { Chart1Component } from './charts/chart1.component';
 import { Chart2Component } from './charts/chart2.component';
+import { PokemonComponent } from './pokemon.component';
 
 @NgModule({
   declarations: [
@@ -21,6 +22,7 @@ import { Chart2Component } from './charts/chart2.component';
       TableComponent,
       Chart1Component,
       Chart2Component,
+      PokemonComponent,
   ],
   imports: [
       FormsModule,

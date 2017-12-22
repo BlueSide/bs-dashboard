@@ -3,13 +3,19 @@ import { Chart } from 'chart.js';
 
 export class BSChart extends Chart
 {
-    public urls: string[];
+    public urls: Map<string, string>;
     
     constructor(canvas: ElementRef, chartObject: ChartObject)
     {
         let context = canvas.nativeElement.getContext('2d');
         super(context, chartObject);
-        this.urls = [];
+
+        this.urls = new Map();
+    }
+
+    public addUrl(key: string, url: string)
+    {
+        this.urls.set(key, url);
     }
 }
 

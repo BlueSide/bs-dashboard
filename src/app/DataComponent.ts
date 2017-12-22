@@ -1,22 +1,28 @@
 import { GlobalFilters } from './GlobalFilters';
 import { Filter } from './Filter';
 import { WebSocketService } from './WebSocketService';
+import { Database } from './Database';
 
 export abstract class DataComponent
 {
 
-    protected dataSets: DataSet[] = [];
-    protected dataLoaded: boolean;
+    private readonly DATASTORE_NAME = "datasets";
+    
+    public dataLoaded: boolean;
+    public dataSets: DataSet[] = [];
+
     protected hasError: boolean;
     protected localFilters: Filter[] = [];
     protected filters: Filter[] = [];
-    
+    protected id: number;
+
     protected abstract onUpdate(dataSet: DataSet): void;
     
     constructor()
     {
         this.dataSets = [];
         this.dataLoaded = false;
+
         GlobalFilters.callbacks.push(this.onFilterChange.bind(this));
     }
 
@@ -49,6 +55,27 @@ export abstract class DataComponent
     {
         this.dataSets.push(dataSet);
         WebSocketService.subscribe(dataSet, this);
+        Database.readDataSet(dataSet.query, this.onDatabaseRead.bind(this));
+    }
+
+    public onDatabaseRead(dataSet: DataSet)
+    {
+        //FIXME: Sometimes dataSet comes here undefined. Maybe some race condition?
+        if(dataSet != undefined)
+        {
+            this.dataLoaded = true;
+            this.hasError = false;
+
+            // Update the old dataset with data from the database
+            let oldDataSet = this.getDataSetByQuery(dataSet.query);
+            
+            oldDataSet.unfilteredData = dataSet.unfilteredData;
+            oldDataSet.data = this.filter(dataSet.data);
+            
+            // Signal the component that there's an update
+            this.onUpdate(dataSet);
+        }
+
     }
 
     private onFilterChange(): void
@@ -74,6 +101,7 @@ export abstract class DataComponent
                 this.dataLoaded = true;
                 this.hasError = false;
                 dataSet.data = this.filter(newData.results);
+                Database.storeDataSet(dataSet.query, dataSet);
                 this.onUpdate(dataSet);
             }
         }
@@ -82,8 +110,6 @@ export abstract class DataComponent
     public onClose(): void
     {
         this.hasError = true;
-        //TODO: Semantically this is incorrect, refactor.
-        //this.dataLoaded = true;
     }
 
     protected addFilter(filter: Filter): void
@@ -125,7 +151,7 @@ export interface DataSet
     type: DataType;
     resource: string;
     query: string;
-    data?: any[];
+    data?: any;
     unfilteredData?: any[];
     dataComponent?: DataComponent;
 }
@@ -134,4 +160,5 @@ export interface DataSet
 export enum DataType
 {
     SHAREPOINT = "sp",
+    POKEMON = "pkmn",
 }
