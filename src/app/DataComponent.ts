@@ -60,22 +60,17 @@ export abstract class DataComponent
 
     public onDatabaseRead(dataSet: DataSet)
     {
-        //FIXME: Sometimes dataSet comes here undefined. Maybe some race condition?
-        if(dataSet != undefined)
-        {
-            this.dataLoaded = true;
-            this.hasError = false;
+        this.dataLoaded = true;
+        this.hasError = false;
 
-            // Update the old dataset with data from the database
-            let oldDataSet = this.getDataSetByQuery(dataSet.query);
-            
-            oldDataSet.unfilteredData = dataSet.unfilteredData;
-            oldDataSet.data = this.filter(dataSet.data);
-            
-            // Signal the component that there's an update
-            this.onUpdate(dataSet);
-        }
-
+        // Update the old dataset with data from the database
+        let oldDataSet = this.getDataSetByQuery(dataSet.query);
+        
+        oldDataSet.unfilteredData = dataSet.unfilteredData;
+        oldDataSet.data = this.filter(dataSet.data);
+        
+        // Signal the component that there's an update
+        this.onUpdate(dataSet);
     }
 
     private onFilterChange(): void
