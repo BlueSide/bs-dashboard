@@ -88,17 +88,15 @@ export abstract class DataComponent
     public onNewData(newData: any): void
     {
         // Decide if this message is for us
-        for(let dataSet of this.dataSets)
+        let dataSet = this.getDataSetByQuery(newData.query);
+        if(dataSet != null)
         {
-            if(newData.query === dataSet.query)
-            {
-                dataSet.unfilteredData = newData.results;
-                this.dataLoaded = true;
-                this.hasError = false;
-                dataSet.data = this.filter(newData.results);
-                Database.storeDataSet(dataSet.query, dataSet);
-                this.onUpdate(dataSet);
-            }
+            dataSet.unfilteredData = newData.results;
+            this.dataLoaded = true;
+            this.hasError = false;
+            dataSet.data = this.filter(newData.results);
+            Database.storeDataSet(dataSet.query, dataSet);
+            this.onUpdate(dataSet);
         }
     }
     

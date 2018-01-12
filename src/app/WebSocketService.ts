@@ -4,12 +4,9 @@ import { environment } from '../environments/environment';
 
 export class WebSocketService
 {
-    //private readonly URI: string = "wss://blueside-sp-api.herokuapp.com/d";
-    //private URI: string = "ws://localhost:8080/d";
     private RECONNECT_INTERVAL: number = 1000; //milliseconds
 
     public static socket: WebSocket;
-    //public static datasets: DataSet[];
     public static dataResources: DataResource[];
     
     constructor()
@@ -83,7 +80,7 @@ export class WebSocketService
         //FIXME: This is not working in a production build somehow
         //STUDY: Is this timer being cleaned up?
         //Retry the connection
-        let timer = Observable.timer(0, this.RECONNECT_INTERVAL);
+        let timer = Observable.timer(this.RECONNECT_INTERVAL);
         timer.subscribe(this.connect.bind(this));
     }
     
@@ -96,6 +93,7 @@ export class WebSocketService
             this.onSessionCreated(data);
             break;
         case "update":
+            console.log(data);
             this.onUpdate(data.message);
             break;
 
