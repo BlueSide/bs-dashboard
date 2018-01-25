@@ -1,0 +1,19 @@
+<div class="main uk-grid">
+    <div class="{{'uk-width-1-' + (columns.length + 1)}} col-1">
+        <div *ngFor="let row of rows" class="row">
+            <div class="cell-data">{{row}}</div>
+            <div class="row-header"></div>
+        </div>
+    </div>
+    <div *ngFor="let column of columns; let ci = index" class="{{'uk-width-1-' + (columns.length + 1)}} {{'col-'+(ci+2)}}">
+        <div *ngFor="let row of rows; let ri = index" class="row">
+            <div class="cell-data">{{data[ci][ri]}}</div>
+            <div class="cell"></div>
+        </div>
+    </div>
+    <div class="{{'uk-width-1-' + (columns.length + 1)}}"></div>
+    <div *ngFor="let column of columns" class="{{'uk-width-1-' + (columns.length + 1)}}">
+        <div class="cell-data column-header">{{column}}</div>
+        <div class="column-header-block"></div>
+    </div>
+</div>

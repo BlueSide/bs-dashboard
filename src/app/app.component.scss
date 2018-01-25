@@ -1,6 +1,8 @@
 @import "../variables.scss";
 
-div.uk-container {
-    padding-left: $nav-width;
-    padding-right: 0px;
+$padding-side: 10px;
+
+.uk-container {
+    padding-left: 240 + $padding-side;
+    padding-right: $padding-side;
 }

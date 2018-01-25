@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { WebSocketService } from './WebSocketService';
 import { Database } from './Database';
-
+import { environment } from '../environments/environment';
 
 declare var UIkit: any;
 
@@ -13,6 +13,8 @@ declare var UIkit: any;
 
 export class AppComponent
 {
+    devBuild = environment.production;
+
     public appTitle: string = 'Blue Side Dashboard';
     public liveUpdate: boolean = true;
 

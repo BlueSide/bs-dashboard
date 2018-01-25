@@ -1,0 +1,52 @@
+$cell-height: 50px;
+$colors-list: #465c74, #035992, #136eaa, #2383c3, #3398dc, #4da5e0;
+$offset-colors-list: null, #465c74, #035992, #136eaa, #2383c3, #3398dc, #4da5e0;
+
+.main {
+    margin-left: 0px;
+    text-align: center;
+    color: #ffffff;
+}
+
+div {
+    padding-left: 0px;
+}
+
+@each $current-color in $colors-list
+{
+    $i: index($colors-list, $current-color);
+    .col-#{$i}
+    { 
+        background-color: $current-color;
+
+        .cell {
+            height: 0px;
+            border-top: $cell-height/2 solid transparent;
+            border-bottom: $cell-height/2 solid transparent;
+            border-left: 10px solid nth($offset-colors-list, $i % length($offset-colors-list));
+        }
+    }
+}
+
+.cell-data {
+    display: inline;
+    position: absolute;
+    padding-top: $cell-height/4;
+}
+
+.column-header-block {
+    height: $cell-height;
+}
+
+.column-header {
+    color: black;
+}
+
+.row-header {
+    height: $cell-height;
+}
+
+.row {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.23);    
+}
+

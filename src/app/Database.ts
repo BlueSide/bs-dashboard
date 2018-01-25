@@ -28,7 +28,7 @@ export class Database
         let transaction = Database.db.transaction([Database.DATASTORE_NAME], "readwrite");
         let store = transaction.objectStore(Database.DATASTORE_NAME);
         let request = store.get(query);
-
+        
         request.onsuccess = function(event)
         {
             //TODO: Test!
@@ -42,6 +42,13 @@ export class Database
                 console.warn("No result returned from the database with key: " + query);
             }
             
+        }
+        
+        request.onerror = function(event)
+        {
+            //TODO: Improve this report
+            console.error("IndexedDB error");
+            console.error(event);
         }
     }
 

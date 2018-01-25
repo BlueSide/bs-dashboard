@@ -5,16 +5,23 @@ import { Filter } from './Filter';
 import { Aggregate } from './Aggregate';
 
 @Component({ 
-    selector: 'value',
-    templateUrl: './value.component.html',
-    styleUrls: ['./value.component.scss']
+    selector: 'funnel',
+    templateUrl: './funnel.component.html',
+    styleUrls: ['./funnel.component.scss']
 })
 
-export class ValueComponent extends DataComponent implements OnInit
+export class FunnelComponent extends DataComponent implements OnInit
 {
 
-    public value: number;
-
+    public columns = ["Intake", "Support", "Execution", "Market push", "asdf"]
+    public rows = ["Health", "Tech", "Mining", "Forestry", "asdf"]
+    public data = [
+        [1,  2,  3,  4, 33],
+        [5,  6,  7,  8, 33],
+        [9,  10, 11, 12, 33],
+        [13, 14, 15, 16, 33],
+        [13, 14, 15, 16, 33],
+    ];    
     constructor()
     {
         super();
@@ -36,9 +43,6 @@ export class ValueComponent extends DataComponent implements OnInit
 
     protected onUpdate(dataSet: DataSet): void
     {
-        console.log("Value!");
         console.log(dataSet.data);
-        this.value = Aggregate.max(dataSet.data, "Integer");
     }
 }
-
