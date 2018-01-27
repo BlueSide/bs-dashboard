@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { DataComponent, DataSet, DataType } from "./DataComponent";
+import { DataComponent, DataSet, DataType } from "../DataComponent";
 
 @Component({
     selector: 'bs-table',

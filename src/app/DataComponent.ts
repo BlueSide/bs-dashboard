@@ -28,7 +28,7 @@ export abstract class DataComponent
 
     protected filter(data: any[]): any[]
     {
-        //Return immediately if we don't need to filter anything
+        // Return immediately if we don't need to filter anything
         if(this.filters.length === 0)
         {
             return data;
@@ -36,7 +36,7 @@ export abstract class DataComponent
 
         let filteredData: any[] = [];
         
-        //TODO: Implement the actual filtering
+        // TODO: Implement the actual filtering
         for(let filter of this.filters)
         {
             for(let item of data)
@@ -89,6 +89,7 @@ export abstract class DataComponent
     {
         // Decide if this message is for us
         let dataSet = this.getDataSetByQuery(newData.query);
+
         if(dataSet != null)
         {
             dataSet.unfilteredData = newData.results;

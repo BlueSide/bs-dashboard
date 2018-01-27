@@ -5,8 +5,8 @@ import { Chart } from 'chart.js';
 
 @Component({ 
     selector: 'chart2',
-    templateUrl: '../chart.component.html',
-    styleUrls: ['../chart.component.scss']
+    templateUrl: 'chart.component.html',
+    styleUrls: ['chart.component.scss']
 })
 
 export class Chart2Component extends DataComponent implements OnInit

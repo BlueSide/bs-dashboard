@@ -6,3 +6,9 @@ $padding-side: 10px;
     padding-left: 240 + $padding-side;
     padding-right: $padding-side;
 }
+
+@media only screen and (max-width: 960px) {
+    .uk-container {
+        padding-left: $padding-side;
+    }
+}

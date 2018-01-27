@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 
-import { DataComponent, DataSet, DataType } from './DataComponent';
-import { Filter } from './Filter';
-import { Aggregate } from './Aggregate';
+import { DataComponent, DataSet, DataType } from '../DataComponent';
+import { Filter } from '../Filter';
+import { Aggregate } from '../Aggregate';
 
 @Component({ 
     selector: 'value',
@@ -36,8 +36,6 @@ export class ValueComponent extends DataComponent implements OnInit
 
     protected onUpdate(dataSet: DataSet): void
     {
-        console.log("Value!");
-        console.log(dataSet.data);
         this.value = Aggregate.max(dataSet.data, "Integer");
     }
 }

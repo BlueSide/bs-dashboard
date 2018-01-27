@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { WebSocketService } from './WebSocketService';
+import { WebSocketService } from '../WebSocketService';
 
 @Component({ 
     selector: 'websocket-status',

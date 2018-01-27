@@ -7,8 +7,8 @@ import { Filter } from '../Filter';
 
 @Component({ 
     selector: 'chart1',
-    templateUrl: '../chart.component.html',
-    styleUrls: ['../chart.component.scss']
+    templateUrl: './chart.component.html',
+    styleUrls: ['./chart.component.scss']
 })
 
 //TODO: Make Chart Component and encapsulate the Chart objects etc.
@@ -77,7 +77,7 @@ export class Chart1Component extends DataComponent implements OnInit
         {
             integers.push(item.Integer);
             labels.push(item.Title);
-        }     
+        }
         
         this.chart.data.labels = labels;
         this.chart.data.datasets[0].data = integers;

@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { DataComponent, DataSet, DataType } from "./DataComponent";
+import { DataComponent, DataSet, DataType } from "../DataComponent";
 
 @Component({
     selector: 'pokemon',
@@ -19,7 +19,7 @@ export class PokemonComponent extends DataComponent
     {
         super();
 
-        let pokemonId = Math.floor((Math.random() * 150) + 1);
+        let pokemonId = Math.floor((Math.random() * 255) + 1);
         
         let dataSet1 = {
             type: DataType.POKEMON,
@@ -32,7 +32,6 @@ export class PokemonComponent extends DataComponent
 
     protected onUpdate(dataSet: DataSet)
     {
-        console.log(dataSet);
         this.name = dataSet.data.name;
         this.types = dataSet.data.types;
         this.abilities = dataSet.data.abilities;

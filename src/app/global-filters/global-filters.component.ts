@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { GlobalFilter } from './Filter';
-import { GlobalFilters } from './GlobalFilters';
+import { GlobalFilter } from '../Filter';
+import { GlobalFilters } from '../GlobalFilters';
 @Component({ 
     selector: 'global-filters',
     templateUrl: 'global-filters.component.html',
